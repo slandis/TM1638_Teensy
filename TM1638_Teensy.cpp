@@ -41,37 +41,15 @@ void TM1638_Teensy::setDisplay(boolean active) {
 }
 
 void TM1638_Teensy::clearDisplay() {
-  sendCommand(DISP_MODE | (this->active ? 8 : 0) | this->brightness);
-  sendCommand(WRITE_FIXED);
-
-  digitalWrite(this->strobe, LOW);
-
   for (int i = 0; i < 8; i++) {
-    sendByte((0xC0 | (i << 1)));
-    sendByte(0x00);
+    setDisplayAt(i, 0x00);
   }
-
-  digitalWrite(this->strobe, HIGH);
-  delayMicroseconds(CS_RISE_US);
-
-  sendCommand(DISP_MODE | (this->active ? 8 : 0) | this->brightness);
 }
 
 void TM1638_Teensy::clearLEDs() {
-  sendCommand(DISP_MODE | (this->active ? 8 : 0) | this->brightness);
-  sendCommand(WRITE_FIXED);
-
-  digitalWrite(this->strobe, LOW);
-
   for (int i = 0; i < 8; i++) {
-    sendByte(0xC0 | (1 + (i << 1)));
-    sendByte(0x00);
+    setLEDAt(i, false);
   }
-
-  digitalWrite(this->strobe, HIGH);
-  delayMicroseconds(CS_RISE_US);
-
-  sendCommand(DISP_MODE | (this->active ? 8 : 0) | this->brightness);
 }
 
 void TM1638_Teensy::clearAll() {
